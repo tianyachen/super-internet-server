@@ -1,0 +1,457 @@
+
+The following test is done by running ApacheBench. The benchmark performance are shown below. 
+The evaluation metrics are requests per seconds, failed requests, and transfer rate. 
+
+In conclusion, the super_server (pre-threading + dynamic linking) is the fastest, fast_server 
+(normal threading + dynamic linking) is the second, and baseline (threading + fork&execv) is the slowest.
+
+All servers performance increases as concurrency increases. However, as concurrency becomes larger and larger, 
+we start to see some performance drops on servers but super_server keeps the best performance among the three. 
+
+
+#############################################################################
+
+
+Server Software:        Super_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   0.333 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      856000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    12026.39 [#/sec] (mean)
+Time per request:       166.301 [ms] (mean)
+Time per request:       0.083 [ms] (mean, across all concurrent requests)
+Transfer rate:          2513.33 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   12  13.8      5      37
+Processing:    15   49  18.0     51     203
+Waiting:        0   48  18.8     51     203
+Total:         37   61  12.5     59     204
+
+Percentage of the requests served within a certain time (ms)
+  50%     59
+  66%     62
+  75%     64
+  80%     65
+  90%     70
+  95%     75
+  98%     97
+  99%    121
+ 100%    204 (longest request)
+
+
+
+#############################################################################
+
+Server Software:        Fast_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   0.541 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      852000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    7395.18 [#/sec] (mean)
+Time per request:       270.446 [ms] (mean)
+Time per request:       0.135 [ms] (mean, across all concurrent requests)
+Transfer rate:          1538.25 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   11  14.9      0      37
+Processing:    14  106  38.5    119     452
+Waiting:        3  105  39.0    119     451
+Total:         40  116  29.4    121     479
+
+Percentage of the requests served within a certain time (ms)
+  50%    121
+  66%    125
+  75%    130
+  80%    131
+  90%    134
+  95%    139
+  98%    150
+  99%    155
+ 100%    479 (longest request)
+
+#############################################################################
+
+!!!!! Baseline server can not handle 2000 concurrency
+
+
+#############################################################################
+
+Server Software:        Super_server
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   0.225 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      856000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    17776.43 [#/sec] (mean)
+Time per request:       56.254 [ms] (mean)
+Time per request:       0.056 [ms] (mean, across all concurrent requests)
+Transfer rate:          3715.00 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0   21   4.3     21      32
+Processing:    11   29   9.3     30      67
+Waiting:        0   23   8.1     23      58
+Total:         25   50   8.2     52      84
+
+Percentage of the requests served within a certain time (ms)
+  50%     52
+  66%     54
+  75%     55
+  80%     57
+  90%     60
+  95%     62
+  98%     66
+  99%     72
+ 100%     84 (longest request)
+
+
+
+#############################################################################
+
+Server Software:        Fast_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   0.432 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      852000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    9258.19 [#/sec] (mean)
+Time per request:       108.013 [ms] (mean)
+Time per request:       0.108 [ms] (mean, across all concurrent requests)
+Transfer rate:          1925.78 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    6   9.2      0      27
+Processing:    16   84  24.7     93     114
+Waiting:        0   83  26.5     93     113
+Total:         28   90  16.5     94     116
+
+Percentage of the requests served within a certain time (ms)
+  50%     94
+  66%    100
+  75%    101
+  80%    102
+  90%    104
+  95%    106
+  98%    107
+  99%    107
+ 100%    116 (longest request)
+
+
+#############################################################################
+
+Server Software:        baseline
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        111 bytes
+
+Concurrency Level:      1000
+Time taken for tests:   15.899 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      820000 bytes
+HTML transferred:       444000 bytes
+Requests per second:    251.58 [#/sec] (mean)
+Time per request:       3974.825 [ms] (mean)
+Time per request:       3.975 [ms] (mean, across all concurrent requests)
+Transfer rate:          50.37 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    6   9.8      0      33
+Processing:    15 3730 4364.0   2703   15852
+Waiting:        0  165 251.9     20     883
+Total:         15 3736 4365.3   2711   15874
+
+Percentage of the requests served within a certain time (ms)
+  50%   2711
+  66%   4723
+  75%   4931
+  80%   7690
+  90%   9611
+  95%  13671
+  98%  15256
+  99%  15678
+ 100%  15874 (longest request)
+
+
+
+#############################################################################
+
+
+Server Software:        Super_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.164 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      856000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    24450.18 [#/sec] (mean)
+Time per request:       4.090 [ms] (mean)
+Time per request:       0.041 [ms] (mean, across all concurrent requests)
+Transfer rate:          5109.70 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   0.6      1       5
+Processing:     0    3   2.2      2      32
+Waiting:        0    2   2.2      2      32
+Total:          0    4   2.3      4      34
+
+Percentage of the requests served within a certain time (ms)
+  50%      4
+  66%      4
+  75%      4
+  80%      5
+  90%      6
+  95%      7
+  98%     10
+  99%     14
+ 100%     34 (longest request)
+
+
+
+
+
+
+#############################################################################
+
+Server Software:        Fast_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      100
+Time taken for tests:   0.397 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      852000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    10085.55 [#/sec] (mean)
+Time per request:       9.915 [ms] (mean)
+Time per request:       0.099 [ms] (mean, across all concurrent requests)
+Transfer rate:          2097.87 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1   0.8      0       5
+Processing:     1    9   2.1      9      18
+Waiting:        0    9   2.0      9      15
+Total:          3   10   1.7     10      19
+WARNING: The median and mean for the initial connection time are not within a normal deviation
+        These results are probably not that reliable.
+
+Percentage of the requests served within a certain time (ms)
+  50%     10
+  66%     10
+  75%     10
+  80%     11
+  90%     12
+  95%     13
+  98%     14
+  99%     14
+ 100%     19 (longest request)
+
+
+#############################################################################
+
+
+Server Software:        baseline
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        111 bytes
+
+Concurrency Level:      100
+Time taken for tests:   3.771 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      820000 bytes
+HTML transferred:       444000 bytes
+Requests per second:    1060.85 [#/sec] (mean)
+Time per request:       94.264 [ms] (mean)
+Time per request:       0.943 [ms] (mean, across all concurrent requests)
+Transfer rate:          212.38 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.5      0       8
+Processing:     3   93  87.0     93     821
+Waiting:        0    5   5.4      3      47
+Total:          3   94  87.0     94     821
+
+Percentage of the requests served within a certain time (ms)
+  50%     94
+  66%    103
+  75%    112
+  80%    143
+  90%    196
+  95%    269
+  98%    338
+  99%    385
+ 100%    821 (longest request)
+
+
+
+
+#############################################################################
+
+
+
+Server Software:        Super_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      1
+Time taken for tests:   1.526 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      856000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    2621.73 [#/sec] (mean)
+Time per request:       0.381 [ms] (mean)
+Time per request:       0.381 [ms] (mean, across all concurrent requests)
+Transfer rate:          547.90 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       4
+Processing:     0    0   0.5      0      18
+Waiting:        0    0   0.5      0      18
+Total:          0    0   0.5      0      18
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      0
+  95%      0
+  98%      1
+  99%      2
+ 100%     18 (longest request)
+
+
+
+#############################################################################
+
+
+Server Software:        Fast_server
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        116 bytes
+
+Concurrency Level:      1
+Time taken for tests:   1.849 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      852000 bytes
+HTML transferred:       464000 bytes
+Requests per second:    2162.77 [#/sec] (mean)
+Time per request:       0.462 [ms] (mean)
+Time per request:       0.462 [ms] (mean, across all concurrent requests)
+Transfer rate:          449.87 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       5
+Processing:     0    0   0.3      0       6
+Waiting:        0    0   0.2      0       5
+Total:          0    0   0.3      0       6
+
+Percentage of the requests served within a certain time (ms)
+  50%      0
+  66%      0
+  75%      0
+  80%      0
+  90%      0
+  95%      1
+  98%      1
+  99%      2
+ 100%      6 (longest request)
+
+
+#############################################################################
+
+Server Software:        baseline
+Server Hostname:        128.2.13.164
+Server Port:            8000
+
+Document Path:          /cgi-bin/adder?100&250
+Document Length:        111 bytes
+
+Concurrency Level:      1
+Time taken for tests:   4.162 seconds
+Complete requests:      4000
+Failed requests:        0
+Total transferred:      820000 bytes
+HTML transferred:       444000 bytes
+Requests per second:    961.16 [#/sec] (mean)
+Time per request:       1.040 [ms] (mean)
+Time per request:       1.040 [ms] (mean, across all concurrent requests)
+Transfer rate:          192.42 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       5
+Processing:     1    1   0.4      1      17
+Waiting:        0    0   0.3      0      14
+Total:          1    1   0.5      1      17
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      1
+  95%      1
+  98%      1
+  99%      2
+ 100%     17 (longest request)

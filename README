@@ -1,0 +1,37 @@
+18845 Individual Project
+Developing high performance Web servers
+Tianya Chen
+Carnegie Mellon University
+
+Various servers are developed on top of Tiny server introcuded in CS:APP Book.
+
+This is the home directory for the baseline and optimized servers, they use the GET method
+to serve static content (text, HTML, GIF, and JPG files) out of ./ and to serve dynamic
+content by running CGI programs out of ./cgi-bin. The default 
+page is home.html (rather than index.html) so that we can view
+the contents of the directory from a browser.
+
+The code compiles and runs cleanly using gcc on a Linux kernel.
+
+To run the servers:
+   Run "./super_server <port>" and "./baseline <port>" on the server machine, 
+	e.g., "./super_server 8000".
+   Point your browser at super_server: 
+	static content: http://<host>:8000
+	dynamic content: http://<host>:8000/cgi-bin/adder?1&2
+
+Files:
+  tianyac.tar		            Archive of everything in this directory
+  baseline.c		            The baseline server
+  fast_server.c               The fast server
+  super_server.c              The super server
+  Makefile		               Makefile for baseline.c, fast_server.c, and super_server
+  home.html		               Test HTML page
+  performance.gif		         Image embedded in home.html, summarizing the performance results
+  README		                  This file	
+  cgi-bin/adder.c	            CGI program that adds two numbers
+  cgi-bin/mylib.so            The shared library object that contains CGI program adder
+  cgi-bin/Makefile	         Makefile for adder.c and mylib.so
+  helper files                sbuf.c sbuf.h csapp.c csapp.h
+  benchmark_result.txt        Report some of the testing results from ApacheBench         
+

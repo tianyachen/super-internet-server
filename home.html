@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing high-performance servers</title>
+    <style>
+        img{
+            margin-left: 20%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Benchmark results for different server design</h1>
+    <ol>
+        <li>
+            <b>Super_server</b>: this server uses dynamic linking (i.e. cgi program are part of mylib.so shared library) 
+        </br>
+            protocol to implement cgi and serve dynamic contents. 
+            On top of that, this server also ultilize pre-threading design for faster performance. 
+        </li>
+        <li>
+            <b>Fast_server</b>: this server uses dynamic linking for cgi and traditional multi-thread server design. 
+        </li>
+        <li>
+            <b>Baseline server</b>: this server uses traditional cgi protocol and multi-threading server design. 
+            </br>Specifically,it create a peer thread for each client request and fork a new proccess to execute cgi program if client requests dynamic content. 
+        </li>
+    </ol>
+    <p>
+        The following test is done by running ApacheBench and requesting dynamic content. 
+        The benchmark performance are shown below. 
+        The evaluation metrics are requests per seconds, failed requests, and transfer rate. 
+        
+        In conclusion, the super_server (pre-threading + dynamic linking) is the fastest, fast_server 
+        (normal threading + dynamic linking) is the second, and baseline (threading + fork&execv) is the slowest.
+        
+        All servers performance increases as concurrency increases. However, as concurrency becomes larger and larger,
+        we start to see some performance drops on servers but super_server keeps the best performance among the three. 
+    </p>
+    <img align="middle" src="performance.gif" width="650" height="500">
+</body>
+</html>
+
+
